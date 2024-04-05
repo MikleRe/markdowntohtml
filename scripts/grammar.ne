@@ -9,32 +9,24 @@ var empty = function (d) { return []; };
 %}
 
 lines			  -> line
-				   | lines newline newline line		 {% d => d[0] + d[3] %}
+				   | lines newline newline line			{% d => d[0] + d[3] %}
 
 line 		      -> title
-				   | list	
-            	   | string				 			 {% d => d[0] %}
+            	   | string    		 		 		 	{% d => d[0] %}
 
-list 			  -> ulist
-				   | olist
+index			  -> int "." __				 		 	{% d => "tab i " %} 
+				   | "-" __					 		 	{% d => "tab • " %}
 
-ulist			  -> newline newline
-				   | ulist uelement
+title 			  -> "#" __ string 					 	{% d => "<h1>" + d[2] + "</h1>" %}	
+				   | "##" __ string 			     	{% d => "<h2>" + d[2] + "</h2>" %}
 
-olist			  -> newline newline
-				   | olist oelement
+string    		  -> null                            	{% emptyStr %}
+                   | string newline:? char 		     	{% d => d[0] + d[2] %}
 
-uelement		  -> "-" __ string
+char              -> [^\n\r\\"#]                     	{% id %}
+				   | "\\"							 	{% d => "<br>" %}
 
-oelement		  -> int "." __ string
+dbnewline		  -> newline newline
 
-title 			  -> "#" __ string 					 {% d => "<h1>" + d[2] + "</h1>" %}	
-				   | "##" __ string 			     {% d => "<h2>" + d[2] + "</h2>" %}
-
-string    		  -> null                            {% emptyStr %}
-                   | string newline:? char           {% d => d[0] + d[2] %}
-
-char              -> [^\n\r\\"#]                       {% id %}
-				   | "\\"							 {% d => "<br>" %}	
-
-newline			  -> "\n"                     	     {% emptyStr %}
+newline			  -> "\n"		                     	{% emptyStr %}
+				   | "\r"        					 	{% emptyStr %}
