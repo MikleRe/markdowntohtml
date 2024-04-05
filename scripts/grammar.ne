@@ -18,7 +18,7 @@ index			  -> int "." __				 		 	{% d => "tab i " %}
 				   | "-" __					 		 	{% d => "tab • " %}
 
 title 			  -> "#" __ string 					 	{% d => "<h1>" + d[2] + "</h1>" %}	
-				   | "##" __ string 			     	{% d => "<h2>" + d[2] + "</h2>" %}
+				   | "##" __ char:? dnbewline        	{% d => "<h2>" + d[2] + "</h2>" %}
 
 string    		  -> null                            	{% emptyStr %}
                    | string newline:? char 		     	{% d => d[0] + d[2] %}
