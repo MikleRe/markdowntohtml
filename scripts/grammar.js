@@ -27,7 +27,8 @@ var grammar = {
     {"name": "string$ebnf$1", "symbols": ["newline"], "postprocess": id},
     {"name": "string$ebnf$1", "symbols": [], "postprocess": function(d) {return null;}},
     {"name": "string", "symbols": ["string", "string$ebnf$1", "char"], "postprocess": d => d[0] + d[2]},
-    {"name": "char", "symbols": [/[^\n\r"#]/], "postprocess": id},
+    {"name": "char", "symbols": [/[^\n\r\\"#]/], "postprocess": id},
+    {"name": "char", "symbols": [{"literal":"\\"}], "postprocess": d => "<br>"},
     {"name": "newline", "symbols": [{"literal":"\n"}], "postprocess": emptyStr}
 ]
   , ParserStart: "lines"

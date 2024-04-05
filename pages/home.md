@@ -2,7 +2,7 @@
 
 ## Small title
 
-Little paragraph. \
+Little paragraph \
 with line break
 
 - List

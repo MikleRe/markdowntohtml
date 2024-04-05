@@ -28,7 +28,8 @@ var grammar = {
     {"name": "string$ebnf$1", "symbols": ["newline"], "postprocess": id},
     {"name": "string$ebnf$1", "symbols": [], "postprocess": function(d) {return null;}},
     {"name": "string", "symbols": ["string", "string$ebnf$1", "char"], "postprocess": d => d[0] + d[2]},
-    {"name": "char", "symbols": [/[^\n\r"#]/], "postprocess": id},
+    {"name": "char", "symbols": [/[^\n\r\\"#]/], "postprocess": id},
+    {"name": "char", "symbols": [{"literal":"\\"}], "postprocess": d => "<br>"},
     {"name": "newline", "symbols": [{"literal":"\n"}], "postprocess": emptyStr}
 ]
   , ParserStart: "lines"
@@ -53,21 +54,32 @@ function loadMarkdownFile(filePath) {
             return response.text();
         })
         .then(markdownContent => {
-            var parsed = acorn.parse(markdownContent, markdownOptions);
-            document.querySelector("content").innerHTML = parsed;
+            const parser = new nearley.Parser(nearley.Grammar.fromCompiled(grammar));
+
+            parser.feed(markdownContent);
+
+            console.log(parser.results);
+
+            document.querySelector("content").innerHTML = parser.results;
         })
         .catch(
             error => console.error('Error fetching html:', error)
         );
 }
 
-//loadMarkdownFile("./pages/home.md");
+loadMarkdownFile("./pages/home.md");
 
 var home = `# Title
 
 ## Small title
 
 Little paragraph.
+
+test
+test
+
+test \\
+test
 
 `;
 
@@ -77,7 +89,7 @@ parser.feed(home);
 
 console.log(parser.results);
 
-document.querySelector("content").innerHTML = parser.results;
+//document.querySelector("content").innerHTML = parser.results;
 },{"./grammar.js":1,"nearley":3}],3:[function(require,module,exports){
 (function(root, factory) {
     if (typeof module === 'object' && module.exports) {
