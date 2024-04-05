@@ -1,0 +1,10 @@
+body {
+    margin: 50px 15% 50px 15%;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+header {
+    font-size: large;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
